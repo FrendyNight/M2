@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#006e5b">
+  <title>Organizator debaty studenckiej</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">UwB</span><span>Mini-projekt M2 <small>Algorytmy i struktury danych I</small></span></div>
+    <span class="topic-tag">ASD1-M2-03</span>
+  </header>
+  <main>
+    <div class="workspace-shell">
+      <aside class="side-rail" aria-label="Nawigacja debaty">
+        <div class="rail-label">PANEL DEBATY</div>
+        <a href="#ustawienia"><span>01</span> Ustawienia</a>
+        <a href="#uczestnicy"><span>02</span> Uczestnicy</a>
+        <a href="#kolejka"><span>03</span> Kolejka głosów</a>
+        <a href="#wystapienie"><span>04</span> Wystąpienie</a>
+        <a href="#wyniki"><span>05</span> Wyniki</a>
+        <div class="rail-bottom"><b>UwB</b><span>INFORMATYKA<br>MINI-PROJEKT M2</span></div>
+      </aside>
+      <div class="dashboard-content">
+    <section class="intro">
+      <div class="intro-copy"><p class="eyebrow">DYSKUSJA I WSPÓŁPRACA <span class="eyebrow-rule"></span></p><h1>Organizator debaty studenckiej</h1><p class="lead">Kolejka zgłoszeń, kontrola czasu i czytelne podsumowanie wystąpień.</p></div>
+      <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div><div class="bubble bubble-left">A</div><div class="bubble bubble-right">B</div><div class="hero-clock"><span>00</span><i>:</i><span>60</span><small>TWÓJ GŁOS</small></div><span class="hero-caption">GŁOS<br>MA ZNACZENIE</span></div>
+      <div class="intro-stat"><span>STATUS DEBATY</span><strong id="statusBadge">Gotowa</strong><small>ASD I · M2 · 2026/27</small></div>
+    </section>
+    <section class="settings panel" id="ustawienia">
+      <label>Temat debaty<input id="topicInput" maxlength="160" value="Czy sztuczna inteligencja pomaga studentom?"></label>
+      <label>Limit wypowiedzi (sekundy)<input id="limitInput" type="number" min="1" max="3600" value="60"></label>
+      <button id="saveSettings" class="button button-secondary">Zapisz ustawienia</button>
+    </section>
+    <div class="grid">
+      <section class="panel participants-panel" id="uczestnicy" data-step="01">
+        <div class="section-heading"><div><p class="eyebrow">UCZESTNICY</p><h2>Lista debatujących</h2></div><span class="count" id="participantCount">0 osób</span></div>
+        <form id="participantForm" class="inline-form"><label class="sr-only" for="participantId">ID uczestnika</label><input id="participantId" placeholder="ID, np. A" maxlength="32" required><label class="sr-only" for="participantName">Nazwa uczestnika</label><input id="participantName" placeholder="Imię lub nazwa" maxlength="80" required><button class="button" type="submit">Dodaj</button></form>
+        <div id="participantsList" class="list empty-state">Dodaj pierwszą osobę, aby rozpocząć.</div>
+      </section>
+      <section class="panel queue-panel" id="kolejka" data-step="02">
+        <div class="section-heading"><div><p class="eyebrow">FIFO</p><h2>Kolejka głosów</h2></div><span class="count" id="queueCount">0 oczekujących</span></div>
+        <div id="queueList" class="list empty-state">Kolejka jest pusta.</div>
+        <div class="queue-actions"><select id="joinSelect" aria-label="Wybierz osobę do kolejki"><option value="">Wybierz osobę</option></select><button id="joinQueue" class="button">Dołącz do kolejki</button><button id="callNext" class="button button-dark">Wywołaj następną</button></div>
+      </section>
+      <section class="panel timer-panel" id="wystapienie">
+        <div class="section-heading"><div><p class="eyebrow">WYSTĄPIENIE</p><h2 id="speakerHeading">Mówca nie został wywołany</h2></div><span class="timer-state" id="timerState">Nie trwa</span></div>
+        <div class="timer" id="timerDisplay">00:00</div>
+        <div class="timer-actions"><button id="startTimer" class="button" disabled>Start</button><button id="stopTimer" class="button button-secondary" disabled>Zakończ i zapisz</button><label class="manual-time">Czas testowy (s)<input id="manualSeconds" type="number" min="0" max="3600" placeholder="np. 65"></label><button id="saveManual" class="button button-secondary" disabled>Zapisz czas</button></div>
+        <p class="message" id="appMessage" role="status" aria-live="polite">Dodaj uczestników i zgłoszenia, aby rozpocząć debatę.</p>
+      </section>
+      <section class="panel summary-panel" id="wyniki">
+        <div class="section-heading"><div><p class="eyebrow">WYNIKI</p><h2>Podsumowanie i ranking</h2></div><button id="refreshSummary" class="text-button">Przelicz</button></div>
+        <div id="summaryTable" class="table-wrap"></div>
+        <div id="speechHistory" class="speech-history"></div>
+      </section>
+    </div>
+    <section class="panel data-panel">
+      <div><p class="eyebrow">DANE DEBATY</p><h2>Import i eksport</h2><p class="muted">Eksportuj JSON jako kopię danych. Import najpierw sprawdzi cały plik.</p></div>
+      <div class="data-actions"><button id="exportJson" class="button button-secondary">Eksportuj JSON</button><label class="button button-secondary file-button">Importuj JSON<input id="importJson" type="file" accept="application/json,.json" hidden></label><button id="scenarioTypical" class="button">Scenariusz typowy</button><button id="scenarioBoundary" class="button button-secondary">Graniczny</button><button id="scenarioLarge" class="button button-secondary">Większy zestaw</button><button id="loadExample" class="text-button">Przykład kontrolny</button></div>
+    </section>
+    <details class="panel algorithm-panel"><summary>Jak działają algorytmy w projekcie?</summary><div class="algorithm-content"><p><strong>Kolejka FIFO:</strong> zgłoszenie trafia na koniec, a prowadzący pobiera pierwszą osobę. Wyszukiwanie zgłoszenia i usuwanie go z tablicy wykonuje skan liniowy.</p><p><strong>Wyszukiwanie liniowe:</strong> program sprawdza uczestników po kolei i zatrzymuje się po znalezieniu ID. Licznik pokazuje liczbę sprawdzonych rekordów.</p><p><strong>Sortowanie przez wstawianie:</strong> ranking jest budowany własną funkcją: czas malejąco, przy remisie ID rosnąco. Licznik podaje porównania kluczy. Złożoność sortowania wynosi O(n²) w najgorszym przypadku.</p><div id="algorithmTrace" class="trace">Uruchom przykład kontrolny, aby zobaczyć kroki sortowania.</div><div id="metrics" class="metrics"></div><button id="runBenchmarks" class="button button-secondary">Porównaj 10, 100 i 1000 rekordów</button><div id="benchmarkResult" class="table-wrap"></div></div></details>
+      </div>
+    </div>
+    <footer>Uniwersytet w Białymstoku · Filia w Wilnie <span>Daniel Nedvecki · nr albumu 93797</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
